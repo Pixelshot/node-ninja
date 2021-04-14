@@ -3,13 +3,13 @@
 //  === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 const express = require('express');
 
+// Invoke express
+const app = express();
+
 // Register view engine(for dynamic content - checkout #7 for more info)
 // There are a few packages we can choose to handle our view content but we'll be using ejs for this tutorial.
 app.set('view engine', 'ejs');
 // If your folder or filename is not view, then use app.set('views', 'location of the folder/file')
-
-// Invoke express
-const app = express();
 
 // Listen for requests
 app.listen(3000);
@@ -18,19 +18,33 @@ app.listen(3000);
 // app.get(url we want to listen to, a (request, response) function that we can use to communicate with its contents)
 
 app.get('/', (req, res) => {
-  // Express automatically works out Content-Type Header & Status Code for us
-  // res.send('<p>Hello via Express</p>');
-  // Express looks into absolute root path of the computer(~), we need to configure it to look into relative path instead using root option. See #6(routing & html pages if confused)
-  res.sendFile('./views/index.html', { root: __dirname });
+  const blogs = [
+    {
+      title: 'Yoshi finds eggs',
+      snippet: 'Lorem ipsum dolor sit amet consectetur',
+    },
+    {
+      title: 'Mario finds stars',
+      snippet: 'Lorem ipsum dolor sit amet consectetur',
+    },
+    {
+      title: 'How to defeat bowser',
+      snippet: 'Lorem ipsum dolor sit amet consectetur',
+    },
+  ];
+  // Using ejs to handle view. Previous configuration and notes can be found in previous commits
+  res.render('index', { title: 'Home', blogs }); // because they're the same name, we can shorten it to only one word but keeping it for clarity
 });
 
 app.get('/about', (req, res) => {
-  res.sendFile('./views/about.html', { root: __dirname });
+  res.render('about', { title: 'About' });
 });
 
-// Redirects
-app.get('/about-us', (req, res) => {
-  res.redirect('about');
+// Redirect removed. Check previous commit for it
+
+// Create blog page
+app.get('/blogs/create', (req, res) => {
+  res.render('create', { title: 'Create a new Blog' });
 });
 
 // Express is gonna go through the routes starting from the top and it'll stop once it finds a matching path.
@@ -40,5 +54,5 @@ app.get('/about-us', (req, res) => {
 // 404 Page
 app.use((req, res) => {
   // Need to explicitly tell Express that this is a 404 file(using the status option)
-  res.status(404).sendFile('./views/404.html', { root: __dirname });
+  res.status(404).render('404', { title: '404' });
 });
