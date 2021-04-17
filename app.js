@@ -3,6 +3,8 @@
 //  === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 const express = require('express');
 
+// Morgan Middleware
+const morgan = require('morgan');
 // Invoke express
 const app = express();
 
@@ -14,6 +16,14 @@ app.set('view engine', 'ejs');
 // Listen for requests
 app.listen(3000);
 
+//  === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
+//  === === === === === === === === === === === === ===  MIDDLEWARE & STATIC FILES === === === === === === === === === === === === === ===
+// express needs to gain permission to communicate with other files(like css). We can't just simply create one under the directory and link.
+// express uses "express.static()" to communicate with them
+app.use(express.static('public'));
+app.use(morgan('dev'));
+
+//  === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === === ===
 // Syntax
 // app.get(url we want to listen to, a (request, response) function that we can use to communicate with its contents)
 
